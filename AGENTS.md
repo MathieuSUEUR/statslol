@@ -13,6 +13,7 @@ Les agents **DOIVENT** consulter et respecter les documents de référence suiva
 - **Périmètre & Guardrails :** [01-mvp-strict-scope.md](file:///.agents/rules/01-mvp-strict-scope.md)
 - **Standards Backend :** [02-nodejs-backend-standards.md](file:///.agents/rules/02-nodejs-backend-standards.md)
 - **Standards Frontend :** [03-nextjs-frontend-standards.md](file:///.agents/rules/03-nextjs-frontend-standards.md)
+- **Workflow Git :** [04-git-workflow-standards.md](file:///.agents/rules/04-git-workflow-standards.md)
 
 ## 2. Instructions Critiques
 - **MVP Uniquement :** Ne développez aucune fonctionnalité hors du périmètre strict (Multi-Search, app bureau, etc.).

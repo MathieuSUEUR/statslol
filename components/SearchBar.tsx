@@ -5,15 +5,15 @@ import { useRouter } from 'next/navigation';
 import { Search, ChevronDown } from 'lucide-react';
 
 const REGIONS = [
-  { id: 'europe', label: 'EUW' },
-  { id: 'na', label: 'NA' },
+  { id: 'euw1', label: 'EUW' },
+  { id: 'na1', label: 'NA' },
   { id: 'kr', label: 'KR' },
 ];
 
 export function SearchBar() {
   const router = useRouter();
   const [riotId, setRiotId] = useState('');
-  const [region, setRegion] = useState('europe');
+  const [region, setRegion] = useState('euw1');
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,10 +21,17 @@ export function SearchBar() {
 
     let formattedId = riotId.trim();
     if (formattedId.includes('#')) {
-      formattedId = formattedId.replace('#', '-');
+      // Nettoyage des espaces autour du # (ex: "Nom # 1234" -> "Nom-1234")
+      const parts = formattedId.split('#');
+      formattedId = `${parts[0].trim()}-${parts[1].trim()}`;
+    } else if (formattedId.includes('-')) {
+      // Déjà au format URL, on s'assure juste que c'est propre
+      const lastDash = formattedId.lastIndexOf('-');
+      formattedId = `${formattedId.substring(0, lastDash).trim()}-${formattedId.substring(lastDash + 1).trim()}`;
     }
     
     router.push(`/profile/${region}/${encodeURIComponent(formattedId)}`);
+
   };
 
   return (

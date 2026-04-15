@@ -9,15 +9,21 @@ interface ProfilePageProps {
 }
 
 async function getPlayer(region: string, riotId: string) {
-  const decodedId = decodeURIComponent(riotId);
-  const [gameName, tagline] = decodedId.split('-');
+  const decodedId = decodeURIComponent(riotId).trim();
+  
+  // On split par le DERNIER tiret pour éviter les problèmes si le pseudo contient un tiret
+  const lastDashIndex = decodedId.lastIndexOf('-');
+  if (lastDashIndex === -1) return null;
+
+  const gameName = decodedId.substring(0, lastDashIndex).trim();
+  const tagline = decodedId.substring(lastDashIndex + 1).trim();
   
   if (!gameName || !tagline) {
     return null;
   }
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001/api';
     const url = `${baseUrl}/players/search?gameName=${encodeURIComponent(gameName)}&tagline=${encodeURIComponent(tagline)}&region=${region}`;
     
     const res = await fetch(url, { cache: "no-store" });

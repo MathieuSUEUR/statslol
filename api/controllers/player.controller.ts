@@ -13,15 +13,34 @@ export class PlayerController {
     }
 
     try {
+      const platform = (region as string) || 'euw1';
+      
+      // 1. Récupération du compte (PUUID)
       const account = await RiotService.getAccountByRiotId(
         gameName as string,
         tagline as string,
-        (region as string) || 'europe'
+        platform
       );
+
+      if (!account) {
+        return res.status(404).json({ error: 'Player not found' });
+      }
+
+      // 2. Récupération du profil Summoner (Level, Icon) via le PUUID
+      const summoner = await RiotService.getSummonerByPuuid(platform, account.puuid);
+
+      // Fusion des données
+      const result = {
+        ...account,
+        summonerLevel: summoner?.summonerLevel,
+        profileIconId: summoner?.profileIconId,
+        revisionDate: summoner?.revisionDate
+      };
       
-      return res.status(200).json(account);
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
+
   }
 }

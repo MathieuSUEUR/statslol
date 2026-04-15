@@ -12,6 +12,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Root Route (Welcome message to avoid "Cannot GET /" confusion)
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).send(`
+    <div style="font-family: sans-serif; text-align: center; padding: 50px;">
+      <h1>StatsLOL API is Running</h1>
+      <p>Use <code>/api/health</code> to check status.</p>
+      <p>Port: ${process.env.PORT || 3001}</p>
+    </div>
+  `);
+});
+
 // Health Check
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK', message: 'API is running' });
